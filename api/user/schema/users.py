@@ -42,3 +42,8 @@ class GetUserDetails(BaseModel):
     university :str
     department : str
     books : list[Book]
+
+
+class LoginRequest(BaseModel):
+    username: str
+    password: str

@@ -5,7 +5,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from starlette import status
 
 from backend.api.user.schema.users import User, GetUserRole, GetAssignedUser, GetUserDetails, CreateUserRole, \
-    AssignUserUni
+    AssignUserUni, LoginRequest
 
 from fastapi import APIRouter, HTTPException, Depends
 
@@ -19,8 +19,8 @@ router = APIRouter(
 )
 
 @router.post("/api/v1/login")
-async def login(form_data: OAuth2PasswordRequestForm = Depends()):
-    user = await authenticate_user(form_data.username, form_data.password)
+async def login(login_data: LoginRequest):
+    user = await authenticate_user(login_data.username, login_data.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
