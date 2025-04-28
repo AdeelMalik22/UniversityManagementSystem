@@ -12,14 +12,15 @@ security = HTTPBearer()
 
 
 async def authenticate_user(username: str, password: str):
+    """Authenticate a user"""
     user = await mongodb["users"].find_one({"username": username})
     if not user or not pwd_context.verify(password, user["password"]):
         return False
     return user
 
 
-
 async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    """Get current user"""
     token = credentials.credentials
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])

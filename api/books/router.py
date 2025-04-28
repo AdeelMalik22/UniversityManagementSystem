@@ -20,7 +20,7 @@ async def create_book(book: Book, current_user:str = Depends(get_current_user)):
 
 @router.post("/api/v1/assign-department",response_model=GetAssignedBooks)
 async def assign_to_department(payload:GetAllBooks,current_user:str = Depends(get_current_user)):
-
+    """Assign books to department"""
     if not await mongodb["books"].find_one({"_id": ObjectId(payload.book_id)}):
         raise HTTPException(status_code=404, detail="book does not exist")
 

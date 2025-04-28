@@ -25,6 +25,7 @@ async def get_universities(current_user:str = Depends(get_current_user)):
 
 @router.get("/api/v1/get-assigned-depart/{uni_id}", response_model=List[GetDepartments])
 async def get_assigned_depart(uni_id:str,current_user:str = Depends(get_current_user)):
+    """Get assigned departments"""
     universities = await mongodb["departments"].find().to_list(None)
     return universities
 

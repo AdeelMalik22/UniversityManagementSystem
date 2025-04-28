@@ -1,6 +1,4 @@
-
 from typing import List
-
 from bson import ObjectId
 from fastapi import APIRouter, HTTPException, Depends
 from backend.api.books.schema.books import GetAllBooks
@@ -23,7 +21,7 @@ async def create_department(department: Department,current_user:str = Depends(ge
 
 @router.post("/api/v1/assign-university/",response_model=GetDepart)
 async def assign_department_to_university(request:GetDepartments,current_user:str = Depends(get_current_user)):
-
+    """Assign department to university"""
     if not await mongodb["departments"].find_one({"_id": ObjectId(request.department_id)}):
         raise HTTPException(status_code=404, detail="department does not exist")
 
@@ -39,5 +37,6 @@ async def get_departments(current_user:str = Depends(get_current_user)):
 
 @router.get("/get-assigned-books/{depart_id}", response_model=List[GetAllBooks])
 async def get_department_assigned_books(depart_id: str,current_user:str = Depends(get_current_user)):
+    """Get assigned books to specific department"""
     result = await mongodb["books"].find({"department_id":str(depart_id)}).to_list(None)
     return result

@@ -20,6 +20,7 @@ router = APIRouter(
 
 @router.post("/api/v1/login")
 async def login(login_data: LoginRequest):
+    """Generate Access Token"""
     user = await authenticate_user(login_data.username, login_data.password)
     if not user:
         raise HTTPException(
@@ -32,8 +33,8 @@ async def login(login_data: LoginRequest):
 
 
 @router.post("/api/v1/create-user", response_model=User)
-async def create_user(user:User , current_user:Depends = Depends(get_current_user)):
-
+async def create_user(user:User , current_user:str = Depends(get_current_user)):
+    """Create new user with a check to see if the user is already registered"""
     existing_user = await mongodb["users"].find_one({"username": user.username})
     if existing_user:
         raise HTTPException(status_code=400, detail="Username taken")
@@ -41,6 +42,7 @@ async def create_user(user:User , current_user:Depends = Depends(get_current_use
     if existing_user_email:
         raise HTTPException(status_code=400, detail="Email taken")
 
+    # Hashing password
     hashed_password = get_password_hash(user.password)
     user_dict = user.dict()
     user_dict["password"] = hashed_password
@@ -50,7 +52,8 @@ async def create_user(user:User , current_user:Depends = Depends(get_current_use
     return result
 
 @router.post("/api/v1/create-user-role/", response_model=GetUserRole)
-async def create_current_user_role(payload:CreateUserRole,current_user:str= Depends(get_current_user)):
+async def create_user_role(payload:CreateUserRole,current_user:str= Depends(get_current_user)):
+    """Assign Role to a user"""
     if not await mongodb["users"].find_one({"_id":ObjectId(payload.user_id)}):
         raise HTTPException(status_code=404, detail="User does not exist")
 
@@ -61,6 +64,7 @@ async def create_current_user_role(payload:CreateUserRole,current_user:str= Depe
 
 @router.get("/api/v1/get-users-wrt-roles", response_model=GetUserRole)
 async def get_users(role: str , current_user:str= Depends(get_current_user)):
+    """Get users with specific role"""
     user =  await mongodb["users"].find_one({"role" : role.lower()})
     return user
 
@@ -71,6 +75,7 @@ async def get_users( current_user:str= Depends(get_current_user)):
 
 @router.post("/api/v1/assign-uni&depart/{uni_id}/{depart_id}", response_model=AssignUserUni)
 async def assign_uni_and_department(request:GetAssignedUser,user : str = Depends(get_current_user)):
+    """Assign uni and department to a user"""
     if not await mongodb["users"].find_one({"_id":ObjectId(request.user_id)}):
 
         raise HTTPException(status_code=404, detail="User does not exist")
@@ -82,7 +87,7 @@ async def assign_uni_and_department(request:GetAssignedUser,user : str = Depends
 
 @router.get("/api/v1/user-details", response_model=GetUserDetails)
 async def user_details(user_id:str,user: str = Depends(get_current_user)):
-
+    """Get user details"""
     user_data = await mongodb["users"].find_one({"_id": ObjectId(user_id)})
     if not user_data:
         raise HTTPException(status_code=404, detail="User does not exist")
