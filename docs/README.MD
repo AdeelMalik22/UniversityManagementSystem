@@ -47,5 +47,4 @@ A RESTful API for managing users, books, universities, and departments with JWT 
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/fastapi-library-system.git
-   cd fastapi-library-system
+   git clone git@github.com:AdeelMalik22/UniversityManagementSystem.git
