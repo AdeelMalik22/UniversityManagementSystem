@@ -1,6 +1,6 @@
 # FastAPI Library Management System
 
-A RESTful API for managing users, books, universities, and departments with JWT authentication and MongoDB as the database.
+A FastAPI for managing users, books, universities, and departments with JWT authentication and MongoDB as the database.
 
 ## Features
 
