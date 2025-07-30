@@ -12,6 +12,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from backend.api.utils.auth import authenticate_user, get_current_user
 from backend.api.utils.db_collection import mongodb
 from backend.api.utils.hash_password import  create_access_token, get_password_hash
+from backend.api.utils.kafka_producer import send_kafka_log
 
 router = APIRouter(
     prefix="/user",
@@ -23,10 +24,15 @@ async def login(login_data: LoginRequest):
     """Generate Access Token"""
     user = await authenticate_user(login_data.username, login_data.password)
     if not user:
+        send_kafka_log("login failed", {"username": login_data.username})
+
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
         )
+    send_kafka_log("user login", {"username": login_data.username})
+
+
     token_data = {"sub": user["username"]}
     access_token = create_access_token(token_data)
     return {"access_token": access_token, "token_type": "bearer"}
