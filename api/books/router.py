@@ -2,9 +2,9 @@ from typing import List
 from bson import ObjectId
 from fastapi import APIRouter, HTTPException
 from fastapi.params import Depends
-from backend.api.books.schema.books import Book, GetAllBooks, GetAssignedBooks
-from backend.api.utils.auth import get_current_user
-from backend.api.utils.db_collection import mongodb
+from api.books.schema.books import Book, GetAllBooks, GetAssignedBooks
+from api.utils.auth import get_current_user
+from api.utils.db_collection import mongodb
 
 router = APIRouter(
     prefix="/book",

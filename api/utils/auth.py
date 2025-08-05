@@ -1,9 +1,6 @@
-from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
-from fastapi import Depends, HTTPException, status
-
-from backend.api.utils.db_collection import mongodb
-from backend.api.utils.hash_password import SECRET_KEY, ALGORITHM, pwd_context
+from api.utils.db_collection import mongodb
+from api.utils.hash_password import SECRET_KEY, ALGORITHM, pwd_context
 
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi import Depends, HTTPException, status
