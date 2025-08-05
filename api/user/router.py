@@ -33,7 +33,7 @@ async def login(login_data: LoginRequest):
 
 
 @router.post("/api/v1/create-user", response_model=User)
-async def create_user(user:User , current_user:str = Depends(get_current_user)):
+async def create_user(user:User):
     """Create new user with a check to see if the user is already registered"""
     existing_user = await mongodb["users"].find_one({"username": user.username})
     if existing_user:
