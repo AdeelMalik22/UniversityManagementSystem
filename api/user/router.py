@@ -1,18 +1,12 @@
 from typing import List
-
 from bson import ObjectId
-from fastapi.security import OAuth2PasswordRequestForm
-from starlette import status
-
-from backend.api.user.schema.users import User, GetUserRole, GetAssignedUser, GetUserDetails, CreateUserRole, \
+from api.user.schema.users import User, GetUserRole, GetAssignedUser, GetUserDetails, CreateUserRole, \
     AssignUserUni, LoginRequest
-
-from fastapi import APIRouter, HTTPException, Depends
-
-from backend.api.utils.auth import authenticate_user, get_current_user
-from backend.api.utils.db_collection import mongodb
-from backend.api.utils.hash_password import  create_access_token, get_password_hash
-from backend.api.utils.kafka_producer import send_kafka_log
+from fastapi import APIRouter, HTTPException, Depends,status
+from api.utils.auth import authenticate_user, get_current_user
+from api.utils.db_collection import mongodb
+from api.utils.hash_password import  create_access_token, get_password_hash
+from api.utils.kafka_producer import send_kafka_log
 
 router = APIRouter(
     prefix="/user",

@@ -1,9 +1,9 @@
 from typing import List
 from fastapi import APIRouter, Depends
-from backend.api.department.router import GetDepartments
-from backend.api.university.schemas.university import University
-from backend.api.utils.auth import get_current_user
-from backend.api.utils.db_collection import mongodb
+from api.department.router import GetDepartments
+from api.university.schemas.university import University
+from api.utils.auth import get_current_user
+from api.utils.db_collection import mongodb
 
 router = APIRouter(
     prefix="/university",
